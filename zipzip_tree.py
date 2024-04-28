@@ -58,6 +58,7 @@ class ZipZipTree:
 			rank = self.get_random_rank()
 		self.size += 1
 		self.root = self._insert(self.root, key, val, rank)
+
 	def _insert(self, node: Node, key: KeyType, val: ValType, rank: Rank) -> Node:
 		if node is None:
 			return Node(key, val, rank, None, None)
@@ -72,6 +73,7 @@ class ZipZipTree:
 			return self._rotate_right(node)
 		node.right = self._insert(node.right, key, val, rank)
 		return self._rotate_left(node)
+
 	def _rotate_right(self, node: Node) -> Node:
 		if node.left.rank.geometric_rank < node.rank.geometric_rank or (node.left.rank.geometric_rank == node.rank.geometric_rank and node.left.rank.uniform_rank < node.rank.uniform_rank):
 			return node
@@ -79,6 +81,7 @@ class ZipZipTree:
 		node.left = left.right
 		left.right = node
 		return left
+
 	def _rotate_left(self, node: Node) -> Node:
 		if node.right.rank.geometric_rank < node.rank.geometric_rank or (node.right.rank.geometric_rank == node.rank.geometric_rank and node.right.rank.uniform_rank < node.rank.uniform_rank):
 			return node
@@ -90,6 +93,7 @@ class ZipZipTree:
 	def remove(self, key: KeyType):
 		self.size -= 1
 		self.root = self._remove(self.root, key)
+
 	def _remove(self, node: Node, key: KeyType) -> Node:
 		if node is None:
 			return None
@@ -109,6 +113,7 @@ class ZipZipTree:
 
 	def find(self, key: KeyType) -> ValType:
 		return self._find(self.root, key)
+
 	def _find(self, node: Node, key: KeyType) -> ValType:
 		if node is None:
 			return None
@@ -123,6 +128,7 @@ class ZipZipTree:
 
 	def get_height(self) -> int:
 		return self._get_height(self.root)-1
+
 	def _get_height(self, node: Node) -> int:
 		if node is None:
 			return 0
@@ -130,6 +136,7 @@ class ZipZipTree:
 
 	def get_depth(self, key: KeyType):
 		return self._get_depth(self.root, key)-1
+
 	def _get_depth(self, node: Node, key: KeyType):
 		if key < node.key:
 			return 1 + self._get_depth(node.left, key)

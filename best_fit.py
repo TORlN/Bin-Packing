@@ -1,3 +1,6 @@
+from decimal import Decimal, getcontext
+getcontext().prec = 3
+
 def best_fit(items: list[float], assignment: list[int], free_space: list[float]):
     for i in range(len(items)):
         best_bin = -1
@@ -5,14 +8,20 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
         for j in range(len(free_space)):
             if free_space[j] >= items[i] and round(free_space[j] - items[i],10) < min_space:
                 best_bin = j
-                min_space = round(free_space[j] - items[i],10)
+                initial = Decimal(free_space[j])
+                item = Decimal(items[i])
+                min_space = float(initial - item)
 
         if best_bin != -1:
-            free_space[best_bin] = round(free_space[best_bin] - items[i], 10)
+            initial = Decimal(free_space[best_bin])
+            item = Decimal(items[i])
+            free_space[best_bin] = float(initial - item)
             assignment[i] = best_bin
         else:
             new_bin_index = len(free_space)
-            free_space.append(round(1.0 - items[i], 10))
+            initial = Decimal(1.0)
+            item = Decimal(items[i])
+            free_space.append(float(initial - item))
             assignment[i] = new_bin_index
 
     return assignment, free_space
