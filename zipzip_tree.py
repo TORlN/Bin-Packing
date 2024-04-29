@@ -54,62 +54,102 @@ class ZipZipTree:
 		return Rank(geometric_rank, uniform_rank)
 
 	def insert(self, key: KeyType, val: ValType, rank: Rank = None):
+		self.size += 1
 		if rank is None:
 			rank = self.get_random_rank()
-		self.size += 1
-		self.root = self._insert(self.root, key, val, rank)
-
-	def _insert(self, node: Node, key: KeyType, val: ValType, rank: Rank) -> Node:
-		if node is None:
-			return Node(key, val, rank, None, None)
-		if rank.geometric_rank < node.rank.geometric_rank or (rank.geometric_rank == node.rank.geometric_rank and rank.uniform_rank < node.rank.uniform_rank):
-			if key < node.key:
-				node.left = self._insert(node.left, key, val, rank)
+		rank = (rank.geometric_rank, rank.uniform_rank)
+		x = Node(key, val, rank, None, None)
+		cur = self.root
+		while cur is not None and (rank < cur.rank or (rank == cur.rank and rank > cur.rank)):
+			prev = cur
+			if key < cur.key:
+				cur = cur.left
 			else:
-				node.right = self._insert(node.right, key, val, rank)
-			return node
-		if key < node.key:
-			node.left = self._insert(node.left, key, val, rank)
-			return self._rotate_right(node)
-		node.right = self._insert(node.right, key, val, rank)
-		return self._rotate_left(node)
+				cur = cur.right
+		if cur == self.root:
+			self.root = x
+		elif key < prev.key:
+			prev.left = x
+		else:
+			prev.right = x
+		if cur is None:
+			x.left = x.right = None	
+			return
+		if key < cur.key:
+			x.right = cur
+		else:
+			x.left = cur
+		prev = x
+		while cur is not None:
+			fix = prev
+			if cur.key < key:
+				while(1):
+					if cur is None or cur.key > key:
+						break
+					prev = cur
+					cur = cur.right
+			else:
+				while(1):
+					if cur is None or cur.key < key:
+						break
+					prev = cur
+					cur = cur.left
+			if fix.key > key or (fix == x and prev.key > key):
+				fix.left = cur
+			else:
+				fix.right = cur
+		
+	# def _rotate_right(self, node: Node) -> Node:
+	# 	if node.left.rank.geometric_rank < node.rank.geometric_rank or (node.left.rank.geometric_rank == node.rank.geometric_rank and node.left.rank.uniform_rank < node.rank.uniform_rank):
+	# 		return node
+	# 	left = node.left
+	# 	node.left = left.right
+	# 	left.right = node
+	# 	return left
 
-	def _rotate_right(self, node: Node) -> Node:
-		if node.left.rank.geometric_rank < node.rank.geometric_rank or (node.left.rank.geometric_rank == node.rank.geometric_rank and node.left.rank.uniform_rank < node.rank.uniform_rank):
-			return node
-		left = node.left
-		node.left = left.right
-		left.right = node
-		return left
-
-	def _rotate_left(self, node: Node) -> Node:
-		if node.right.rank.geometric_rank < node.rank.geometric_rank or (node.right.rank.geometric_rank == node.rank.geometric_rank and node.right.rank.uniform_rank < node.rank.uniform_rank):
-			return node
-		right = node.right
-		node.right = right.left
-		right.left = node
-		return right
+	# def _rotate_left(self, node: Node) -> Node:
+	# 	if node.right.rank.geometric_rank < node.rank.geometric_rank or (node.right.rank.geometric_rank == node.rank.geometric_rank and node.right.rank.uniform_rank < node.rank.uniform_rank):
+	# 		return node
+	# 	right = node.right
+	# 	node.right = right.left
+	# 	right.left = node
+	# 	return right
 
 	def remove(self, key: KeyType):
 		self.size -= 1
-		self.root = self._remove(self.root, key)
-
-	def _remove(self, node: Node, key: KeyType) -> Node:
-		if node is None:
-			return None
-		if key < node.key:
-			node.left = self._remove(node.left, key)
-			return node
-		if key > node.key:
-			node.right = self._remove(node.right, key)
-			return node
-		if node.left is None:
-			return node.right
-		if node.right is None:
-			return node.left
-		node.key = self._min(node.right)
-		node.right = self._remove(node.right, node.key)
-		return node
+		cur = self.root
+		while key != cur.key:
+			prev = cur
+			if key < cur.key:
+				cur = cur.left
+			else:
+				cur = cur.right
+		left = cur.left
+		right = cur.right
+		if left is None:
+			cur = right
+		elif right is None:
+			cur = left
+		elif left.rank >= right.rank:
+			cur = left
+		else:
+			cur = right
+		if self.root.key == key:
+			self.root = cur
+		elif key < prev.key:
+			prev.left = cur
+		else:
+			prev.right = cur
+		
+		while left is not None and right is not None:
+			if left.ranke >= right.rank:
+				while left is not None or left.rank < right.rank:
+					prev = left
+					left = left.right
+			else:
+				while right is not None or left.rank >= right.rank:
+					prev = right
+					right = right.left
 
 	def find(self, key: KeyType) -> ValType:
 		return self._find(self.root, key)

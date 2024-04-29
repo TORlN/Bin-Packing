@@ -1,14 +1,9 @@
-from decimal import Decimal, getcontext
-getcontext().prec = 3
-
 def first_fit(items: list[float], assignment: list[int], free_space: list[float]):
     for i in range(len(items)):
         placed = False
         for j in range(len(free_space)):
             if free_space[j] >= items[i]:
-                initial = Decimal(free_space[j])
-                item = Decimal(items[i])
-                free_space[j] = float(initial - item)
+                free_space[j] = round(free_space[j] - items[i], 10)
                 assignment[i] = j
                 placed = True
                 break
