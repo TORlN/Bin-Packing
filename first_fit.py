@@ -28,12 +28,8 @@ def first_fit(items: list[float], assignment: list[int], free_space: list[float]
 
 
 def first_fit_decreasing(items: list[float], assignment: list[int], free_space: list[float]):
-    # sort in decreasing order
-    sorted_items = sorted(range(len(items)), key=lambda i: -items[i])
-
-    # use best-fit
-    newItems = [items[i] for i in sorted_items]
-    return first_fit(newItems, assignment, free_space)
+    items.sort(reverse=True)
+    return first_fit(items, assignment, free_space)
 def findNode(current, item):
     if current is None:
         return None

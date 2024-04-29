@@ -29,7 +29,7 @@ import random
 KeyType = TypeVar('KeyType')
 ValType = TypeVar('ValType')
 
-@dataclass
+@dataclass(order=True)
 class Rank:
 	geometric_rank: int
 	uniform_rank: int
@@ -57,7 +57,6 @@ class ZipZipTree:
 		self.size += 1
 		if rank is None:
 			rank = self.get_random_rank()
-		rank = (rank.geometric_rank, rank.uniform_rank)
 		x = Node(key, val, rank, None, None)
 		cur = self.root
 		while cur is not None and (rank < cur.rank or (rank == cur.rank and rank > cur.rank)):
@@ -144,7 +143,7 @@ class ZipZipTree:
 
 	def _find(self, node: Node, key: KeyType) -> ValType:
 		if node is None:
-			return None
+			return self.root.val
 		if key < node.key:
 			return self._find(node.left, key)
 		if key > node.key:
