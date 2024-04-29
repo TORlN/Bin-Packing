@@ -98,22 +98,6 @@ class ZipZipTree:
 				fix.left = cur
 			else:
 				fix.right = cur
-		
-	# def _rotate_right(self, node: Node) -> Node:
-	# 	if node.left.rank.geometric_rank < node.rank.geometric_rank or (node.left.rank.geometric_rank == node.rank.geometric_rank and node.left.rank.uniform_rank < node.rank.uniform_rank):
-	# 		return node
-	# 	left = node.left
-	# 	node.left = left.right
-	# 	left.right = node
-	# 	return left
-
-	# def _rotate_left(self, node: Node) -> Node:
-	# 	if node.right.rank.geometric_rank < node.rank.geometric_rank or (node.right.rank.geometric_rank == node.rank.geometric_rank and node.right.rank.uniform_rank < node.rank.uniform_rank):
-	# 		return node
-	# 	right = node.right
-	# 	node.right = right.left
-	# 	right.left = node
-	# 	return right
 
 	def remove(self, key: KeyType):
 		self.size -= 1
@@ -142,12 +126,16 @@ class ZipZipTree:
 			prev.right = cur
 		
 		while left is not None and right is not None:
-			if left.ranke >= right.rank:
-				while left is not None or left.rank < right.rank:
+			if left.rank >= right.rank:
+				while(1):
+					if left is None or left.rank < right.rank:
+						break
 					prev = left
 					left = left.right
 			else:
-				while right is not None or left.rank >= right.rank:
+				while(1):
+					if right is None or left.rank >= right.rank:
+						break
 					prev = right
 					right = right.left
 
