@@ -8,7 +8,7 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
     
     tree.insert(key=1.0, val=0)
     
-    for item in items:
+    for i, item in enumerate(items):
         current = findNode(tree.root, item)
         if current is not None:
             deltaSpace = round(current.key - item,10)
@@ -20,7 +20,7 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
         else:
             deltaSpace = round(1.0 - item,10)
             tree.insert(key=deltaSpace, val=len(free_space))
-            assignment[items.index(item)] = len(free_space)
+            assignment[i] = len(free_space)
             free_space.append(deltaSpace)
         # os.system('cls')
         # print2D(tree.root)
@@ -32,15 +32,16 @@ def best_fit_decreasing(items: list[float], assignment: list[int], free_space: l
     items.sort(reverse=True)
     return best_fit(items, assignment, free_space)
 
-def findNode(current, item, best_fit=None):
-    if current is None:
-        return best_fit
-    if current.key >= item:
-        if best_fit is None or current.key < best_fit.key:
-            best_fit = current 
-        return findNode(current.left, item, best_fit)
-    else:
-        return findNode(current.right, item, best_fit)
+def findNode(current, item):
+    best_fit = None
+    while current is not None:
+        if current.key >= item:
+            if best_fit is None or current.key < best_fit.key:
+                best_fit = current
+            current = current.left
+        else:
+            current = current.right
+    return best_fit
     
     
     
