@@ -3,8 +3,8 @@ from printTree import print2D
 import os
 
 def best_fit(items: list[float], assignment: list[int], free_space: list[float]):
-    free_space.append(1.0)  # Initialize each bin with 1.0 unit of space
-    tree = ZipZipTree(capacity=len(items))  # Initialize the tree with the capacity equal to the number of bins
+    free_space.append(1.0)
+    tree = ZipZipTree(capacity=len(items)) 
     
     tree.insert(key=1.0, val=0)
     
