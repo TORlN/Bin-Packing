@@ -130,18 +130,14 @@ class ZipZipTree:
 		
 		while left is not None and right is not None:
 			if left.rank >= right.rank:
-				while True:
+				while left is not None and left.rank >= right.rank:
 					prev = left
 					left = left.right
-					if left is None or left.rank < right.rank:
-						break
 				prev.right = right
 			else:
-				while True:
+				while right is not None and left.rank < right.rank:
 					prev = right
 					right = right.left
-					if right is None or left.rank >= right.rank:
-						break
 				prev.left = left
 
 
