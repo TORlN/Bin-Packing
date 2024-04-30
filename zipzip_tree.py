@@ -53,13 +53,14 @@ class ZipZipTree:
 		uniform_rank = random.randint(0, int(math.log(self.capacity) ** 3) - 1)
 		return Rank(geometric_rank, uniform_rank)
 
+
 	def insert(self, key: KeyType, val: ValType, rank: Rank = None):
 		self.size += 1
 		if rank is None:
 			rank = self.get_random_rank()
 		x = Node(key, val, rank, None, None)
 		cur = self.root
-		while cur is not None and (rank < cur.rank or (rank == cur.rank and rank > cur.rank)):
+		while cur is not None and (rank < cur.rank or (rank == cur.rank and key > cur.key)):
 			prev = cur
 			if key < cur.key:
 				cur = cur.left
@@ -71,8 +72,10 @@ class ZipZipTree:
 			prev.left = x
 		else:
 			prev.right = x
+   
 		if cur is None:
-			x.left = x.right = None	
+			x.left = None
+			x.right = None
 			return
 		if key < cur.key:
 			x.right = cur
@@ -82,17 +85,14 @@ class ZipZipTree:
 		while cur is not None:
 			fix = prev
 			if cur.key < key:
-				while(1):
-					if cur is None or cur.key > key:
-						break
+				while cur is not None and cur.key <= key:
 					prev = cur
 					cur = cur.right
 			else:
-				while(1):
-					if cur is None or cur.key < key:
-						break
+				while cur is not None and cur.key >= key:
 					prev = cur
-					cur = cur.left
+					cur = cur.left   
+
 			if fix.key > key or (fix == x and prev.key > key):
 				fix.left = cur
 			else:
@@ -101,7 +101,8 @@ class ZipZipTree:
 	def remove(self, key: KeyType):
 		self.size -= 1
 		cur = self.root
-		while key != cur.key:
+		prev = None
+		while key is not cur.key:
 			prev = cur
 			if key < cur.key:
 				cur = cur.left
@@ -109,6 +110,8 @@ class ZipZipTree:
 				cur = cur.right
 		left = cur.left
 		right = cur.right
+  
+
 		if left is None:
 			cur = right
 		elif right is None:
@@ -117,7 +120,8 @@ class ZipZipTree:
 			cur = left
 		else:
 			cur = right
-		if self.root.key == key:
+   
+		if prev is None:
 			self.root = cur
 		elif key < prev.key:
 			prev.left = cur
@@ -126,17 +130,20 @@ class ZipZipTree:
 		
 		while left is not None and right is not None:
 			if left.rank >= right.rank:
-				while(1):
-					if left is None or left.rank < right.rank:
-						break
+				while True:
 					prev = left
 					left = left.right
-			else:
-				while(1):
-					if right is None or left.rank >= right.rank:
+					if left is None or left.rank < right.rank:
 						break
+				prev.right = right
+			else:
+				while True:
 					prev = right
 					right = right.left
+					if right is None or left.rank >= right.rank:
+						break
+				prev.left = left
+
 
 	def find(self, key: KeyType) -> ValType:
 		return self._find(self.root, key)
@@ -165,6 +172,8 @@ class ZipZipTree:
 		return self._get_depth(self.root, key)-1
 
 	def _get_depth(self, node: Node, key: KeyType):
+		if node is None:
+			return 0
 		if key < node.key:
 			return 1 + self._get_depth(node.left, key)
 		if key > node.key:

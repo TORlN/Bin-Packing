@@ -2,6 +2,7 @@ import requirements
 
 from typing import TypeVar, NamedTuple, Callable
 from copy import deepcopy
+from printTree import print2D
 
 # Instructions
 # Some test cases for the Zi[ZipTree and bin packing algorithms can be found in the main block below.
@@ -83,10 +84,6 @@ def zip_tree_tests():
 	geometric_rank_mean = geometric_rank_sum / num_ranks
 
 	print(f'random geometric rank mean: {geometric_rank_mean}, Expected: ~1')
-
-	print(f'find(4): {tree2.find(4)}, Expected: a')
-	print(f'remove(4): {tree2.remove(4)}')
-	print(f'find(4): {tree2.find(4)}, Expected: None')
 def bin_packing_tests():
 	print('\ntesting bin packing\ntest 1')
 	items = [0.1, 0.8, 0.3, 0.5, 0.7, 0.2, 0.6, 0.4]

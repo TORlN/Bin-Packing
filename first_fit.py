@@ -5,11 +5,7 @@ def first_fit(items: list[float], assignment: list[int], free_space: list[float]
     free_space.append(1.0)  # Initialize each bin with 1.0 unit of space
     tree = ZipZipTree(capacity=len(items))  # Initialize the tree with the capacity equal to the number of bins
     
-    # Populate the tree with initial free space values
-    for index, space in enumerate(items):
-        if space > 0:
-            tree.insert(key=index, val=1.0)
-    # print2D(tree.root)
+    tree.insert(key=0, val=1.0)
     # Process each item
     for item in items:
         current = tree.root
@@ -19,11 +15,13 @@ def first_fit(items: list[float], assignment: list[int], free_space: list[float]
         if current is not None:
             deltaSpace = round(current.val - item,10)
             assignment[items.index(item)] = current.key
-            if current.key >= len(free_space):
-                free_space.append(deltaSpace)
-            else:
-                free_space[current.key] = deltaSpace
+            free_space[current.key] = deltaSpace
             current.val = deltaSpace
+        else:
+            deltaSpace = round(1.0 - item,10)
+            tree.insert(key=len(free_space), val=deltaSpace)
+            assignment[items.index(item)] = len(free_space)
+            free_space.append(deltaSpace)
     return assignment, free_space
 
 
