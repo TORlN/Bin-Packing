@@ -15,7 +15,7 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
             tree.remove(current.key)
             if deltaSpace > 0:
                 tree.insert(key=deltaSpace, val=current.val)
-            assignment[items.index(item)] = current.val
+            assignment[i] = current.val
             free_space[current.val] = deltaSpace
         else:
             deltaSpace = round(1.0 - item,10)

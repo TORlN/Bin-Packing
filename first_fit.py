@@ -12,7 +12,7 @@ def first_fit(items: list[float], assignment: list[int], free_space: list[float]
         current = findNode(current, item)
         if current is not None:
             deltaSpace = round(current.val - item,10)
-            assignment[items.index(item)] = current.key
+            assignment[i] = current.key
             free_space[current.key] = deltaSpace
             current.val = deltaSpace
         else:
