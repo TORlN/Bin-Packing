@@ -1,5 +1,6 @@
 
 COUNT = [10]
+import os
 def print2DUtil(root, space):
  
     # Base case
@@ -29,5 +30,6 @@ def print2D(root):
  
     # space=[0]
     # Pass initial space count as 0
+    os.system('cls')
     print2DUtil(root, 0)
 

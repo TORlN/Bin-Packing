@@ -1,6 +1,5 @@
-from zipzip_tree import ZipZipTree, Rank, Node
+from zipzip_tree import ZipZipTree
 from printTree import print2D
-import os
 
 def best_fit(items: list[float], assignment: list[int], free_space: list[float]):
     free_space.append(1.0)
@@ -11,19 +10,17 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
     for i, item in enumerate(items):
         current = findNode(tree.root, item)
         if current is not None:
-            deltaSpace = round(current.key - item,10)
+            deltaSpace = round(current.key - item, 10)
             tree.remove(current.key)
             if deltaSpace > 0:
                 tree.insert(key=deltaSpace, val=current.val)
             assignment[i] = current.val
             free_space[current.val] = deltaSpace
         else:
-            deltaSpace = round(1.0 - item,10)
+            deltaSpace = round(1.0 - item, 10)
             tree.insert(key=deltaSpace, val=len(free_space))
             assignment[i] = len(free_space)
             free_space.append(deltaSpace)
-        # os.system('cls')
-        # print2D(tree.root)
     return assignment, free_space
         
     

@@ -107,7 +107,7 @@ class ZipZipTree:
 		self.size -= 1
 		cur = self.root
 		prev = None
-		while key is not cur.key:
+		while key != cur.key:
 			prev = cur
 			if key < cur.key:
 				cur = cur.left
@@ -116,34 +116,46 @@ class ZipZipTree:
 		left = cur.left
 		right = cur.right
   
-
 		if left is None:
-			cur = right
+			next_node = right
 		elif right is None:
-			cur = left
+			next_node = left
 		elif left.rank >= right.rank:
-			cur = left
+			next_node = left
 		else:
-			cur = right
+			next_node = right
    
 		if prev is None:
-			self.root = cur
+			self.root = next_node
 		elif key < prev.key:
-			prev.left = cur
+			prev.left = next_node
 		else:
-			prev.right = cur
-		
-		while left is not None and right is not None:
-			if left.rank >= right.rank:
-				while left is not None and left.rank >= right.rank:
-					prev = left
-					left = left.right
-				prev.right = right
+			prev.right = next_node
+   
+		if left is not None and right is not None:
+			if next_node == left:
+				leftmost = next_node
+				while leftmost.right is not None:
+					leftmost = leftmost.right
+				leftmost.right = right
 			else:
-				while right is not None and left.rank < right.rank:
-					prev = right
-					right = right.left
-				prev.left = left
+				rightmost = next_node
+				while rightmost.left is not None:
+					rightmost = rightmost.left
+				rightmost.left = left
+       
+		
+		# while left is not None and right is not None:
+		# 	if left.rank >= right.rank:
+		# 		while left is not None and left.rank >= right.rank:
+		# 			prev = left
+		# 			left = left.right
+		# 		prev.right = right
+		# 	else:
+		# 		while right is not None and left.rank < right.rank:
+		# 			prev = right
+		# 			right = right.left
+		# 		prev.left = left
 
 
 	def find(self, key: KeyType) -> ValType:
