@@ -85,10 +85,7 @@ def zip_tree_tests():
 
 	print(f'random geometric rank mean: {geometric_rank_mean}, Expected: ~1')
 	
-	print2D(tree.root)
-	print('removing 4')
-	tree.remove(4)
-	print2D(tree.root)
+	
 def bin_packing_tests():
 	print('\ntesting bin packing\ntest 1')
 	items = [0.1, 0.8, 0.3, 0.5, 0.7, 0.2, 0.6, 0.4]
@@ -199,6 +196,7 @@ def bin_packing_tests():
 	test_algorithm(test4, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing')
 
 	# add new tests...
+
 
 if __name__ == '__main__':
 	zip_tree_tests()
