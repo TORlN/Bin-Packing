@@ -49,7 +49,7 @@ class ZipZipTree:
 		self.root = None
 
 	def get_random_rank(self) -> Rank:
-		geometric_rank = 1 + int(math.log(random.random()) / math.log(1 - .95))
+		geometric_rank = int(math.log(random.random()) / math.log(.5))
 
 		if self.capacity > 1:
 			max_uniform = int(math.log(self.capacity)**3) - 1
