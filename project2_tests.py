@@ -84,6 +84,11 @@ def zip_tree_tests():
 	geometric_rank_mean = geometric_rank_sum / num_ranks
 
 	print(f'random geometric rank mean: {geometric_rank_mean}, Expected: ~1')
+	
+	print2D(tree.root)
+	print('removing 4')
+	tree.remove(4)
+	print2D(tree.root)
 def bin_packing_tests():
 	print('\ntesting bin packing\ntest 1')
 	items = [0.1, 0.8, 0.3, 0.5, 0.7, 0.2, 0.6, 0.4]
