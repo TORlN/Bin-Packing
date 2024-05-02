@@ -17,7 +17,7 @@ def print2DUtil(root, space):
     print()
     for i in range(COUNT[0], space):
         print(end=" ")
-    print((root.key, root.val))
+    print((root.key, root.val, root.rank))
  
     # Process left child
     print2DUtil(root.left, space)

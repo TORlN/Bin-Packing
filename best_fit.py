@@ -22,8 +22,8 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
             tree.insert(key=deltaSpace, val=len(free_space))
             assignment[i] = len(free_space)
             free_space.append(deltaSpace)
-        # os.system('cls')
-        # print2D(tree.root)
+        os.system('cls')
+        print2D(tree.root)
     return assignment, free_space
         
     
