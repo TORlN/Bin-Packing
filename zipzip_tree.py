@@ -41,6 +41,7 @@ class Node:
 	rank: Rank
 	left: Node
 	right: Node
+	parent: Node
 
 class ZipZipTree:
 	def __init__(self, capacity: int):
@@ -63,8 +64,9 @@ class ZipZipTree:
 		self.size += 1
 		if rank is None:
 			rank = self.get_random_rank()
-		x = Node(key, val, rank, None, None)
+		x = Node(key, val, rank, None, None, None)
 		cur = self.root
+		prev = None
 		while cur is not None and (rank < cur.rank or (rank == cur.rank and key > cur.key)):
 			prev = cur
 			if key < cur.key:
@@ -75,17 +77,21 @@ class ZipZipTree:
 			self.root = x
 		elif key < prev.key:
 			prev.left = x
+			x.parent = prev
 		else:
 			prev.right = x
+			x.parent = prev
    
 		if cur is None:
 			x.left = None
 			x.right = None
-			return
+			return x
 		if key < cur.key:
 			x.right = cur
+			cur.parent = x
 		else:
 			x.left = cur
+			cur.parent = x
 		prev = x
 		while cur is not None:
 			fix = prev
@@ -100,10 +106,16 @@ class ZipZipTree:
 
 			if fix.key > key or (fix == x and prev.key > key):
 				fix.left = cur
+				if cur:
+					cur.parent = fix
 			else:
 				fix.right = cur
+				if cur:
+					cur.parent = fix
+		return x
 
 	def remove(self, key: KeyType):
+		
 		self.size -= 1
 		cur = self.root
 		prev = None
@@ -116,6 +128,7 @@ class ZipZipTree:
 		left = cur.left
 		right = cur.right
   
+  
 		if left is None:
 			next_node = right
 		elif right is None:
@@ -125,37 +138,32 @@ class ZipZipTree:
 		else:
 			next_node = right
    
+		if next_node:
+			next_node.parent = prev
+   
 		if prev is None:
 			self.root = next_node
 		elif key < prev.key:
 			prev.left = next_node
 		else:
 			prev.right = next_node
-   
-		if left is not None and right is not None:
-			if next_node == left:
-				leftmost = next_node
-				while leftmost.right is not None:
-					leftmost = leftmost.right
-				leftmost.right = right
-			else:
-				rightmost = next_node
-				while rightmost.left is not None:
-					rightmost = rightmost.left
-				rightmost.left = left
-       
 		
-		# while left is not None and right is not None:
-		# 	if left.rank >= right.rank:
-		# 		while left is not None and left.rank >= right.rank:
-		# 			prev = left
-		# 			left = left.right
-		# 		prev.right = right
-		# 	else:
-		# 		while right is not None and left.rank < right.rank:
-		# 			prev = right
-		# 			right = right.left
-		# 		prev.left = left
+		while left is not None and right is not None:
+			if left.rank >= right.rank:
+				while left is not None and left.rank >= right.rank:
+					prev = left
+					left = left.right
+				prev.right = right
+				if right:
+					right.parent = prev
+			else:
+				while right is not None and left.rank < right.rank:
+					prev = right
+					right = right.left
+				prev.left = left
+				if left:
+					left.parent = prev
+		
 
 
 	def find(self, key: KeyType) -> ValType:
