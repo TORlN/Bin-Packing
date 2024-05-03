@@ -14,26 +14,21 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
             tree.remove(current.key)
             if deltaSpace > 0.0:
                 x = tree.insert(key=deltaSpace, val=(current.val[0], current.val[1]))
+                update(x)
             else:
-                pass
-            # print2D(tree.root)
+                if removedParent:
+                    update(removedParent)
+                else:
+                    update(tree.root)
+            update(current)
             assignment[i] = current.val[0]
             free_space[current.val[0]] = deltaSpace
-            # print2D(tree.root)
-            if removedParent:
-                update(removedParent)
-            update(x)
-            # print2D(tree.root)
-            pass
         else:
             deltaSpace = round(1.0 - item, 10)
             current = tree.insert(key=deltaSpace, val=(len(free_space), deltaSpace))
             assignment[i] = len(free_space)
             free_space.append(deltaSpace)
-            # print2D(tree.root)
             update(current)
-            # print2D(tree.root)
-            pass
     return assignment, free_space
 
 def best_fit_decreasing(items: list[float], assignment: list[int], free_space: list[float]):
@@ -57,9 +52,6 @@ def findNode(current, item, best_fit=None):
             best_fit = rightBest
     return best_fit
     
-
-        
-
 def update(current):
     if current.left is None and current.right is None:
         current.val = (current.val[0], 0.0)
