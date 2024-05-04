@@ -2,7 +2,8 @@ import requirements
 
 from typing import TypeVar, NamedTuple, Callable
 from copy import deepcopy
-from printTree import print2D
+import time
+
 
 # Instructions
 # Some test cases for the Zi[ZipTree and bin packing algorithms can be found in the main block below.
@@ -209,8 +210,10 @@ def bin_packing_tests():
 	return True
 
 if __name__ == '__main__':
+	start = time.time()
 	for i in range(1000):
 		if not bin_packing_tests():
 			print("FAILED")
 			break
-	print("PASSED")
+	end = time.time()
+	print(f"Time taken: {end - start}")

@@ -168,7 +168,6 @@ class ZipZipTree:
 					left.parent = prev
 
 			lowest_affected_node = prev
-		
 		return lowest_affected_node
 
 	def find(self, key: KeyType) -> ValType:
@@ -217,3 +216,4 @@ class ZipZipTree:
 		if key > node.key:
 			return 1 + self._get_depth(node.right, key)
 		return 1
+

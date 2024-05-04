@@ -15,8 +15,6 @@ def first_fit(items: list[float], assignment: list[int], free_space: list[float]
             assignment[i] = current.key
             free_space[current.key] = deltaSpace
             current.val = (deltaSpace, current.val[1])
-            # if deltaSpace == 0.0:
-            #     tree.remove(current.key)
             update(current)
         else:
             deltaSpace = round(1.0 - item,10)

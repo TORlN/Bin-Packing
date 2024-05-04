@@ -7,15 +7,17 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
     
     tree.insert(key=1.0, val=(0, 0.0))
     for i, item in enumerate(items):
+        # print2D(tree.root)
         current = findNode(tree.root, item, tree)
-        if current is not None:
+        if current:
             deltaSpace = round(current.key - item, 10)
-            x = tree.remove(current.key)
-            if x is not None:
-                update(x)
+            removed = tree.remove(current.key)
+            if removed:
+                update(removed)
             if deltaSpace > 0.0:
-                x = tree.insert(key=deltaSpace, val=(current.val[0], current.val[1]))
-                update(x)
+                inserted = tree.insert(key=deltaSpace, val=(current.val[0], current.val[1]))
+                update(inserted)
+            
             assignment[i] = current.val[0]
             free_space[current.val[0]] = deltaSpace
         else:
@@ -43,21 +45,33 @@ def findNode(root, size, tree):
         else:
             current = current.right
     return best_fit
-    
 
 def update(current):
     while current:
-        new_max = calculate_new_max(current)
-        if new_max != current.val[1]:
-            current.val = (current.val[0], new_max)
-        current = current.parent
-
-def calculate_new_max(current):
         if current.left is None and current.right is None:
-            return 0.0
+            current.val = (current.val[0], 0.0)
         elif current.left is None:
-            return max(current.right.val[1], current.right.key)
+            current.val = (current.val[0], max(current.right.val[1], current.right.key))
         elif current.right is None:
-            return max(current.left.val[1], current.left.key)
+            current.val = (current.val[0], max(current.left.val[1], current.left.key))
         else:
-            return max(current.left.val[1], current.right.val[1], current.left.key, current.right.key)
+            current.val = (current.val[0], max(current.left.val[1], current.right.val[1], current.left.key, current.right.key))
+        current = current.parent
+    
+
+# def update(current):
+#     while current:
+#         new_max = calculate_new_max(current)
+#         if new_max != current.val[1]:
+#             current.val = (current.val[0], new_max)
+#         current = current.parent
+
+# def calculate_new_max(current):
+#         if current.left is None and current.right is None:
+#             return 0.0
+#         elif current.left is None:
+#             return max(current.right.val[1], current.right.key)
+#         elif current.right is None:
+#             return max(current.left.val[1], current.left.key)
+#         else:
+#             return max(current.left.val[1], current.right.val[1], current.left.key, current.right.key)
