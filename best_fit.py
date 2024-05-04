@@ -43,7 +43,7 @@ def findNode(root, item):
             if current.right and current.val[1] >= item:
                 current = current.right
             else:
-                break  # If no right child or right child does not have a higher key, break the loop
+                break 
     return best_fit
     
 def update(current):
