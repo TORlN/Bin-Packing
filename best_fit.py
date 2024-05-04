@@ -29,14 +29,15 @@ def best_fit_decreasing(items: list[float], assignment: list[int], free_space: l
     items.sort(reverse=True)
     return best_fit(items, assignment, free_space)
 
-def findNode(root, item, tree):
-    size = item
+def findNode(root, size, tree):
     current = root
     best_fit = None
 
     while current:
         if size <= current.key:
-            if not best_fit or (current.key - size < best_fit.key - size):
+            if current.val[1] < size:
+                return current
+            elif not best_fit or (current.key - size < best_fit.key - size):
                 best_fit = current
             current = current.left
         else:
