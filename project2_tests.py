@@ -44,8 +44,10 @@ def test_algorithm(test: ProblemInstance, expected_result: ProblemInstance, algo
 
 	if test_copy.assignments == expected_result.assignments and is_equal(test_copy.free_space, expected_result.free_space):
 		print(f'Test case passed: {name}')
+		return True
 	else:
 		print(f'Test case failed: {name}')
+		return False
 
 def zip_tree_tests():
 	print('testing ZipTree')
@@ -108,11 +110,13 @@ def bin_packing_tests():
 
 	# best-fit
 	expected_result = ProblemInstance(items = items, assignments = [0, 0, 1, 1, 2, 1, 3, 3], free_space = [0.1, 0.0, 0.3, 0.0])
-	test_algorithm(test1, expected_result, requirements.best_fit, 'best_fit')
+	if not test_algorithm(test1, expected_result, requirements.best_fit, 'best_fit'):
+		return False
 
 	# best-fit decreasing
 	expected_result = ProblemInstance(items = items, assignments = [0, 1, 2, 3, 2, 1, 0, 3], free_space = [0.0, 0.0, 0.0, 0.4])
-	test_algorithm(test1, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing')
+	if not test_algorithm(test1, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing'):
+		return False
 
 	print('\ntest 2')
 	items = [0.79, 0.88, 0.95, 0.12, 0.05, 0.46, 0.53, 0.64, 0.04, 0.38, 0.03, 0.26]
@@ -135,11 +139,13 @@ def bin_packing_tests():
 
 	# best-fit
 	expected_result = ProblemInstance(items = items, assignments = [0, 1, 2, 1, 2, 3, 3, 4, 0, 5, 0, 4], free_space = [0.14, 0, 0, 0.01, 0.1, 0.62])
-	test_algorithm(test2, expected_result, requirements.best_fit, 'best_fit')
+	if not test_algorithm(test2, expected_result, requirements.best_fit, 'best_fit'):
+		return False
 
 	# best-fit decreasing
 	expected_result = ProblemInstance(items = items, assignments = [0, 1, 2, 3, 4, 4, 5, 3, 1, 0, 3, 3], free_space = [0, 0, 0.21, 0.03, 0.01, 0.62])
-	test_algorithm(test2, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing')
+	if not test_algorithm(test2, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing'):
+		return False
 
 	print('\ntest 3')
 	items = [0.43, 0.75, 0.25, 0.42, 0.54, 0.03, 0.64]
@@ -162,11 +168,13 @@ def bin_packing_tests():
 
 	# best-fit
 	expected_result = ProblemInstance(items = items, assignments = [0, 1, 1, 0, 2, 0, 3], free_space = [0.12, 0, 0.46, 0.36])
-	test_algorithm(test3, expected_result, requirements.best_fit, 'best_fit')
+	if not test_algorithm(test3, expected_result, requirements.best_fit, 'best_fit'):
+		return False
 
 	# best-fit decreasing
 	expected_result = ProblemInstance(items = items, assignments = [0, 1, 2, 2, 3, 0, 2], free_space = [0, 0.36, 0, 0.58])
-	test_algorithm(test3, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing')
+	if not test_algorithm(test3, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing'):
+		return False
 
 	print('\ntest 4')
 	items = [0.54, 0.67, 0.46, 0.57, 0.06, 0.23, 0.83, 0.64, 0.47, 0.03, 0.53, 0.74, 0.36, 0.24, 0.07, 0.25, 0.05, 0.63, 0.43, 0.04]
@@ -189,15 +197,20 @@ def bin_packing_tests():
 
 	# best-fit
 	expected_result = ProblemInstance(items = items, assignments = [0, 1, 0, 2, 1, 1, 3, 4, 5, 1, 5, 6, 4, 6, 3, 2, 3, 7, 8, 3], free_space = [0, 0.01, 0.18, 0.01, 0, 0, 0.02, 0.37, 0.57])
-	test_algorithm(test4, expected_result, requirements.best_fit, 'best_fit')
+	if not test_algorithm(test4, expected_result, requirements.best_fit, 'best_fit'):
+		return False
 
 	# best-fit decreasing
 	expected_result = ProblemInstance(items = items, assignments = [0, 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 3, 1, 2, 4, 2, 4, 4, 0, 4], free_space = [0.13, 0.01, 0.02, 0, 0, 0, 0, 0])
-	test_algorithm(test4, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing')
+	if not test_algorithm(test4, expected_result, requirements.best_fit_decreasing, 'best_fit_decreasing'):
+		return False
 
 	# add new tests...
-
+	return True
 
 if __name__ == '__main__':
-	zip_tree_tests()
-	bin_packing_tests()
+	for i in range(1000):
+		if not bin_packing_tests():
+			print("FAILED")
+			break
+	print("PASSED")

@@ -44,14 +44,20 @@ def findNode(root, size, tree):
             current = current.right
     return best_fit
     
+
 def update(current):
     while current:
-        if current.left is None and current.right is None:
-            current.val = (current.val[0], 0.0)
-        elif current.left is None:
-            current.val = (current.val[0], max(current.right.val[1], current.right.key))
-        elif current.right is None:
-            current.val = (current.val[0], max(current.left.val[1], current.left.key))
-        else:
-            current.val = (current.val[0], max(current.left.val[1], current.right.val[1], current.left.key, current.right.key))
+        new_max = calculate_new_max(current)
+        if new_max != current.val[1]:
+            current.val = (current.val[0], new_max)
         current = current.parent
+
+def calculate_new_max(current):
+        if current.left is None and current.right is None:
+            return 0.0
+        elif current.left is None:
+            return max(current.right.val[1], current.right.key)
+        elif current.right is None:
+            return max(current.left.val[1], current.left.key)
+        else:
+            return max(current.left.val[1], current.right.val[1], current.left.key, current.right.key)
