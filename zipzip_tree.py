@@ -174,6 +174,18 @@ class ZipZipTree:
 	def find(self, key: KeyType) -> ValType:
 		return self._find(self.root, key)
 
+	def findNode(self, key: KeyType) -> Node:
+		return self._findNode(self.root, key)
+
+	def _findNode(self, node: Node, key: KeyType) -> Node:
+		if node is None:
+			return None
+		if key < node.key:
+			return self._findNode(node.left, key)
+		if key > node.key:
+			return self._findNode(node.right, key)
+		return node
+
 	def _find(self, node: Node, key: KeyType) -> ValType:
 		if node is None:
 			return self.root.val
