@@ -148,6 +148,9 @@ class ZipZipTree:
 		else:
 			prev.right = next_node
 		
+  
+		lowest_affected_node = next_node if next_node else prev 
+
 		while left is not None and right is not None:
 			if left.rank >= right.rank:
 				while left is not None and left.rank >= right.rank:
@@ -163,8 +166,10 @@ class ZipZipTree:
 				prev.left = left
 				if left:
 					left.parent = prev
-		
 
+			lowest_affected_node = prev
+		
+		return lowest_affected_node
 
 	def find(self, key: KeyType) -> ValType:
 		return self._find(self.root, key)
