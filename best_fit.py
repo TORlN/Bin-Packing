@@ -1,6 +1,7 @@
 from zipzip_tree import ZipZipTree
 from printTree import print2D
 from decimal import Decimal, getcontext
+from hybrid_sort3 import hybrid_sort3_desc
 
 getcontext().prec = 20
 
@@ -33,7 +34,7 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
             update(current)
 
 def best_fit_decreasing(items: list[float], assignment: list[int], free_space: list[float]):
-    items.sort(reverse=True)
+    hybrid_sort3_desc(items)
     return best_fit(items, assignment, free_space)
 
 def findNode(root, size: Decimal, tree):
