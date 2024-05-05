@@ -11,13 +11,13 @@ def first_fit(items: list[float], assignment: list[int], free_space: list[float]
         current = tree.root
         current = findNode(current, item)
         if current is not None:
-            deltaSpace = round(current.val[0] - item,25)
+            deltaSpace = round(current.val[0] - item, 10)
             assignment[i] = current.key
             free_space[current.key] = deltaSpace
             current.val = (deltaSpace, current.val[1])
             update(current)
         else:
-            deltaSpace = round(1.0 - item,25)
+            deltaSpace = round(1.0 - item, 10)
             x = tree.insert(key=len(free_space), val=(deltaSpace, deltaSpace))
             assignment[i] = len(free_space)
             free_space.append(deltaSpace)
