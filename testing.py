@@ -35,7 +35,7 @@ def generate_test_data(num_items: int):
 
 
 if __name__ == "__main__":
-    num_items = 1000000
+    num_items = 150000
     items = generate_test_data(num_items)
     items2 = deepcopy(items)
     
@@ -49,16 +49,16 @@ if __name__ == "__main__":
     end = time.time()
     print(f'Best Fit (zip zip) for {num_items} elements: {end - start:.4f} seconds')
     
-    # start = time.time()
-    # best_fit_norm(items, assignment, free_space)
-    # end = time.time()
-    # print(f'Best Fit O(n^2) for {num_items} elements: {end - start:.4f} seconds')
+    start = time.time()
+    best_fit_norm(items, assignment, free_space)
+    end = time.time()
+    print(f'Best Fit O(n^2) for {num_items} elements: {end - start:.4f} seconds')
     
-    # if items == items2:
-    #     print('Items match!')
-    # if assignment == assignment2:
-    #     print('Assignments match!')
-    # if free_space == free_space2:
-    #     print('Free space match!')
+    if items == items2:
+        print('Items match!')
+    if assignment == assignment2:
+        print('Assignments match!')
+    if free_space == free_space2:
+        print('Free space match!')
     
     

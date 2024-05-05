@@ -49,7 +49,11 @@ def findNode(root, size: Decimal, tree):
                 best_fit = current
             current = current.left
         else:
-            current = current.right
+            if current.right:
+                current = current.right
+            else:
+                break
+            
     return best_fit
 
 def update(current):
