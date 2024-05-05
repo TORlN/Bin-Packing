@@ -10,7 +10,7 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
         # print2D(tree.root)
         current = findNode(tree.root, item, tree)
         if current:
-            deltaSpace = round(current.key - item, 10)
+            deltaSpace = round(current.key - item, 25)
             removed = tree.remove(current.key)
             if removed:
                 update(removed)
@@ -21,7 +21,7 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
             assignment[i] = current.val[0]
             free_space[current.val[0]] = deltaSpace
         else:
-            deltaSpace = round(1.0 - item, 10)
+            deltaSpace = round(1.0 - item, 25)
             current = tree.insert(key=deltaSpace, val=(len(free_space), deltaSpace))
             assignment[i] = len(free_space)
             free_space.append(deltaSpace)
