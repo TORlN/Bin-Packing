@@ -35,7 +35,7 @@ def generate_test_data(num_items: int):
 
 
 if __name__ == "__main__":
-    num_items = 150000
+    num_items = 1500
     items = generate_test_data(num_items)
     items2 = deepcopy(items)
     

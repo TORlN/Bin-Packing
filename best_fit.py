@@ -47,7 +47,10 @@ def findNode(root, size: Decimal, tree):
                 return current
             elif not best_fit or (Decimal(str(current.key)) - size < Decimal(str(best_fit.key)) - size):
                 best_fit = current
-            current = current.left
+            if current.left:
+                current = current.left
+            else:
+                break
         else:
             if current.right:
                 current = current.right
