@@ -6,10 +6,11 @@ from hybrid_sort3 import hybrid_sort3_desc
 getcontext().prec = 20
 
 def best_fit(items: list[float], assignment: list[int], free_space: list[float]):
-    free_space.append(1.0)
     tree = ZipZipTree(capacity=len(items))
+    if tree.capacity > 0:
+        tree.insert(key=1.0, val=(0, 0.0))
+        free_space.append(1.0)
     
-    tree.insert(key=1.0, val=(0, 0.0))
     for i, item in enumerate(items):
         item_dec = Decimal(str(item))
         current = findNode(tree.root, item_dec, tree)
@@ -47,15 +48,9 @@ def findNode(root, size: Decimal, tree):
                 return current
             elif not best_fit or (Decimal(str(current.key)) - size < Decimal(str(best_fit.key)) - size):
                 best_fit = current
-            if current.left:
-                current = current.left
-            else:
-                break
+            current = current.left
         else:
-            if current.right:
-                current = current.right
-            else:
-                break
+            current = current.right
             
     return best_fit
 

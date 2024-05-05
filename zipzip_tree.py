@@ -53,7 +53,7 @@ class ZipZipTree:
 		geometric_rank = int(math.log(random.random()) / math.log(.5))
 
 		if self.capacity > 1:
-			max_uniform = int(math.log(self.capacity)**3) - 1
+			max_uniform = int(math.log2(self.capacity)**3) - 1
 			uniform_rank = random.randint(0, max_uniform)
 		else:
 			uniform_rank = 0
