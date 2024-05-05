@@ -2,48 +2,40 @@ import random
 import requirements
 from copy import deepcopy
 import time
+from decimal import Decimal, getcontext
+
+getcontext().prec = 20
 
 def best_fit_norm(items: list[float], assignment: list[int], free_space: list[float]):
-    """Applies the Best Fit algorithm to pack items into bins.
-    
-    Args:
-        items: List of item sizes.
-        assignment: List where assignment[i] stores the bin index for items[i].
-        free_space: List of available space in each bin.
-    """
     bin_index = 0
     for i, item in enumerate(items):
+        item_dec = Decimal(str(item))
         best_bin = -1
-        min_space = float('inf')
-        for j, space in enumerate(free_space):
-            if space >= item and round(space - item,10) < min_space:
-                best_bin = j
-                min_space = space - item
+        min_space = Decimal('Infinity')
         
+        for j, space in enumerate(free_space):
+            space_dec = Decimal(str(space))
+            if space_dec >= item_dec and (space_dec - item_dec) < min_space:
+                best_bin = j
+                min_space = space_dec - item_dec
+
         if best_bin == -1:
             best_bin = bin_index
-            free_space.append(round(1.0 - item,10)) 
+            new_space_dec = Decimal("1.0") - item_dec
+            free_space.append(float(new_space_dec))
             bin_index += 1
         else:
-            free_space[best_bin] = round(free_space[best_bin] - item, 10)
+            remaining_space_dec = Decimal(str(free_space[best_bin])) - item_dec
+            free_space[best_bin] = float(remaining_space_dec)
         
         assignment[i] = best_bin
 
 def generate_test_data(num_items: int):
-    """Generates a list of random item sizes.
-    
-    Args:
-        num_items: The number of items to generate.
-        
-    Returns:
-        List of random item sizes between 0.1 and 0.5.
-    """
-    return [random.uniform(0.1, 0.5) for _ in range(num_items)]
+    return [random.uniform(0.1, 1.0) for _ in range(num_items)]
 
 
-# Run the benchmark test
 if __name__ == "__main__":
-    num_items = 150000
+    num_items = 15000
     items = generate_test_data(num_items)
     items2 = deepcopy(items)
     

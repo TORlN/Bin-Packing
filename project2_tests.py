@@ -217,3 +217,5 @@ if __name__ == '__main__':
 			break
 	end = time.time()
 	print(f"Time taken: {end - start}")
+	# zip_tree_tests()
+	# bin_packing_tests()
