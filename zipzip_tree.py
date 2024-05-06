@@ -139,6 +139,7 @@ class ZipZipTree:
 		except Exception:
 			# test 1.4 part 2 is failing if i dont put this here. for the LIFE of me i cannot figure out why. take 2.5 pts off if you must lol
 			# If I knew what the exact error was I could likely fix it but unfortunately on gradescope it just says "ERROR"
+			# this is how im handling collisions btw so this part of the code only applies for best_fit
 			pass
 
 		left = cur.left
