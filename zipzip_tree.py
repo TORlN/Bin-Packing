@@ -132,13 +132,10 @@ class ZipZipTree:
 				cur = cur.left
 			else:
 				cur = cur.right
-		try:
-			if cur.val and cur.val[0] and isinstance(cur.val[0], list):
-				if len(cur.val[0]) > 1:
-					val = cur.val[0].pop()
-		except Exception as e:
-			print(e)
-			return None
+    
+		if cur.val and cur.val[0] and isinstance(cur.val[0], list):
+			if len(cur.val[0]) > 1:
+				val = cur.val[0].pop()
 
 		left = cur.left
 		right = cur.right
