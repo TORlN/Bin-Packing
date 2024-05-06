@@ -133,9 +133,9 @@ class ZipZipTree:
 				cur = cur.left
 			else:
 				cur = cur.right
-
-		if len(cur.val[0]) > 1:
-			val = cur.val[0].pop()
+		if isinstance(cur.val[0], list):
+			if len(cur.val[0]) > 1:
+				val = cur.val[0].pop()
 
 		left = cur.left
 		right = cur.right
