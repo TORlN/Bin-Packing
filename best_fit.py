@@ -14,37 +14,40 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
     for i, item in enumerate(items):
         item_dec = Decimal(str(item))
         current = findNode(tree.root, item_dec, tree)
-        
+        if current and len(current.val[0]) > 1:
+            pass
+        value = None
+        inserted2 = None
         if current:
             delta_space_dec = Decimal(str(current.key)) - item_dec
             delta_space = float(delta_space_dec)
-            removedVal = current.val[0]
-            multiple = False
             removed = tree.remove(current.key)
             if removed:
                 if isinstance(removed, tuple):
                     update(removed[0])
-                    removedVal = removed[1]
-                    multiple = True
-                else:   
-                    update(removed)
-            if delta_space > 0.0:
-                inserted2 = None
-                if multiple:
-                    inserted = tree.insert(key=current.key, val=(current.val[0], delta_space))
-                    inserted2 = tree.insert(key=delta_space, val=([removedVal], delta_space))
+                    value = removed[1]
                 else:
-                    inserted = tree.insert(key=delta_space, val=(current.val[0], delta_space))
-                if inserted:
-                    update(inserted)
-                if inserted2:
-                    update(inserted2)
-            assignment[i] = current.val[0][0]
-            free_space[current.val[0][0]] = delta_space
+                    update(removed)
+            if value is not None:
+                inserted = tree.insert(key=current.key, val=(current.val[0], current.val[1]))
+                inserted2 = tree.insert(key=delta_space, val=([value], delta_space))
+            else:
+                inserted = tree.insert(key=delta_space, val=(current.val[0], delta_space))
+            if inserted:
+                update(inserted)
+            if inserted2:
+                update(inserted2)
+            if value is not None:
+                assignment[i] = value
+                free_space[value] = delta_space
+            else:
+                assignment[i] = current.val[0][0]
+                free_space[current.val[0][0]] = delta_space
         else:
             delta_space_dec = Decimal("1.0") - item_dec
             delta_space = float(delta_space_dec)
-            current = tree.insert(key=delta_space, val=([len(free_space)], delta_space))
+            if delta_space > 0.0:
+                current = tree.insert(key=delta_space, val=([len(free_space)], delta_space))
             assignment[i] = len(free_space)
             free_space.append(delta_space)
             update(current)

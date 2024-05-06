@@ -69,6 +69,7 @@ class ZipZipTree:
 		if existing_node:
 			if val[0][0] not in existing_node.val[0]:
 				existing_node.val[0].append(val[0][0])
+				existing_node.val[0].sort(reverse=True)
 			return None
 		if rank is None:
 			rank = self.get_random_rank()
@@ -124,7 +125,7 @@ class ZipZipTree:
 	def remove(self, key: KeyType):
 		self.size -= 1
 		cur = self.root
-		existed = False
+		val = None
 		prev = None
 		while key != cur.key:
 			prev = cur
@@ -134,9 +135,7 @@ class ZipZipTree:
 				cur = cur.right
 
 		if len(cur.val[0]) > 1:
-			existed = True
 			val = cur.val[0].pop()
-			
 
 		left = cur.left
 		right = cur.right
@@ -180,7 +179,7 @@ class ZipZipTree:
 					left.parent = prev
 
 			lowest_affected_node = prev
-		if existed:
+		if val is not None:
 			return lowest_affected_node, val
 		return lowest_affected_node
 

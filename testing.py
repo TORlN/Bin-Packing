@@ -84,8 +84,9 @@ def test_best_fit():
     
     print("All test cases passed!")
 if __name__ == "__main__":
-    num_items = 10000
-    items = generate_test_data(num_items, 4)
+    num_items = 50000
+    items = generate_test_data(num_items, 1)
+    # items = [0.9, 0.2, 0.3, 0.8, 0.7, 0.7, 0.2, 0.4, 0.7, 0.8, 0.7, 1.0, 0.8, 0.8, 0.8, 0.2, 0.7, 1.0, 0.4, 0.8, 0.5, 1.0, 0.4, 0.8, 0.2, 0.5, 0.8, 1.0, 0.8, 0.5, 0.9, 0.3, 0.1, 1.0, 0.6, 0.2, 0.9, 0.8, 0.2, 0.4, 0.6, 0.6, 0.6, 0.2, 0.5, 0.8, 1.0, 0.6, 0.3, 0.3]
     items2 = deepcopy(items)
     
     assignment = [0] * num_items
@@ -108,8 +109,10 @@ if __name__ == "__main__":
         print('Items match!')
     if assignment == assignment2:
         print('Assignments match!')
-    if free_space == free_space2:
-        print('Free space match!')
+    waste1 = len(free_space) - sum(items)
+    waste2 = len(free_space2) - sum(items)
+    if waste1 == waste2:
+        print('Free space matches!')
     
     
     
