@@ -124,6 +124,7 @@ class ZipZipTree:
 	def remove(self, key: KeyType):
 		self.size -= 1
 		cur = self.root
+		existed = False
 		prev = None
 		while key != cur.key:
 			prev = cur
@@ -133,7 +134,9 @@ class ZipZipTree:
 				cur = cur.right
 
 		if len(cur.val[0]) > 1:
-			cur.val[0].pop()
+			existed = True
+			val = cur.val[0].pop()
+			
 
 		left = cur.left
 		right = cur.right
@@ -177,6 +180,8 @@ class ZipZipTree:
 					left.parent = prev
 
 			lowest_affected_node = prev
+		if existed:
+			return lowest_affected_node, val
 		return lowest_affected_node
 
 	def find(self, key: KeyType) -> ValType:

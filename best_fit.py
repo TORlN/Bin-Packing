@@ -18,15 +18,27 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
         if current:
             delta_space_dec = Decimal(str(current.key)) - item_dec
             delta_space = float(delta_space_dec)
+            removedVal = current.val[0]
+            multiple = False
             removed = tree.remove(current.key)
             if removed:
-                update(removed)
+                if isinstance(removed, tuple):
+                    update(removed[0])
+                    removedVal = removed[1]
+                    multiple = True
+                else:   
+                    update(removed)
             if delta_space > 0.0:
-                inserted = tree.insert(key=delta_space, val=(current.val[0], delta_space))
+                inserted2 = None
+                if multiple:
+                    inserted = tree.insert(key=current.key, val=(current.val[0], delta_space))
+                    inserted2 = tree.insert(key=delta_space, val=([removedVal], delta_space))
+                else:
+                    inserted = tree.insert(key=delta_space, val=(current.val[0], delta_space))
                 if inserted:
                     update(inserted)
-            if len(current.val[0]) > 1:
-                pass
+                if inserted2:
+                    update(inserted2)
             assignment[i] = current.val[0][0]
             free_space[current.val[0][0]] = delta_space
         else:
