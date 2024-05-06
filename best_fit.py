@@ -8,12 +8,13 @@ getcontext().prec = 20
 def best_fit(items: list[float], assignment: list[int], free_space: list[float]):
     tree = ZipZipTree(capacity=len(items))
     if tree.capacity > 0:
-        tree.insert(key=1.0, val=(0, 0.0))
+        tree.insert(key=1.0, val=([0], 0.0))
         free_space.append(1.0)
     
     for i, item in enumerate(items):
         item_dec = Decimal(str(item))
         current = findNode(tree.root, item_dec, tree)
+        
         if current:
             delta_space_dec = Decimal(str(current.key)) - item_dec
             delta_space = float(delta_space_dec)
@@ -22,14 +23,16 @@ def best_fit(items: list[float], assignment: list[int], free_space: list[float])
                 update(removed)
             if delta_space > 0.0:
                 inserted = tree.insert(key=delta_space, val=(current.val[0], delta_space))
-                update(inserted)
-            
-            assignment[i] = current.val[0]
-            free_space[current.val[0]] = delta_space
+                if inserted:
+                    update(inserted)
+            if len(current.val[0]) > 1:
+                pass
+            assignment[i] = current.val[0][0]
+            free_space[current.val[0][0]] = delta_space
         else:
             delta_space_dec = Decimal("1.0") - item_dec
             delta_space = float(delta_space_dec)
-            current = tree.insert(key=delta_space, val=(len(free_space), delta_space))
+            current = tree.insert(key=delta_space, val=([len(free_space)], delta_space))
             assignment[i] = len(free_space)
             free_space.append(delta_space)
             update(current)

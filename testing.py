@@ -31,10 +31,10 @@ def best_fit_norm(items: list[float], assignment: list[int], free_space: list[fl
         assignment[i] = best_bin
 
 
-def generate_test_data(num_items: int):
+def generate_test_data(num_items: int, roundNum: int):
     data = []
     for i in range(num_items):
-        data.append(random.uniform(0.1, 1.0))
+        data.append(round(random.uniform(0.1, 1.0), roundNum))
     return data
 
 def generate_perfect_test_data(num_items: int):
@@ -84,20 +84,19 @@ def test_best_fit():
     
     print("All test cases passed!")
 if __name__ == "__main__":
-    for i in range(1000):
-        num_items = 150000
-        items = generate_test_data(num_items)
-        items2 = deepcopy(items)
-        
-        assignment = [0] * num_items
-        assignment2 = deepcopy(assignment)
-        free_space = []
-        free_space2 = []
-        
-        start = time.time()
-        requirements.best_fit(items2, assignment2, free_space2)
-        end = time.time()
-        print(f'Best Fit (zip zip) for {num_items} elements: {end - start:.4f} seconds')
+    num_items = 1000
+    items = generate_test_data(num_items, 4)
+    items2 = deepcopy(items)
+    
+    assignment = [0] * num_items
+    assignment2 = deepcopy(assignment)
+    free_space = []
+    free_space2 = []
+    
+    start = time.time()
+    requirements.best_fit(items2, assignment2, free_space2)
+    end = time.time()
+    print(f'Best Fit (zip zip) for {num_items} elements: {end - start:.4f} seconds')
 
     
     start = time.time()

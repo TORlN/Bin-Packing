@@ -25,15 +25,18 @@ from typing import TypeVar
 from dataclasses import dataclass
 import math
 import random
+from hybrid_sort3 import hybrid_sort3_desc
+
 
 KeyType = TypeVar('KeyType')
 ValType = TypeVar('ValType')
+
 
 @dataclass(order=True)
 class Rank:
 	geometric_rank: int
 	uniform_rank: int
- 
+
 @dataclass
 class Node:
 	key: KeyType
@@ -51,7 +54,6 @@ class ZipZipTree:
 
 	def get_random_rank(self) -> Rank:
 		geometric_rank = int(math.log(random.random()) / math.log(.5))
-
 		if self.capacity > 1:
 			max_uniform = int(math.log2(self.capacity)**3) - 1
 			uniform_rank = random.randint(0, max_uniform)
@@ -60,8 +62,15 @@ class ZipZipTree:
 		return Rank(geometric_rank, uniform_rank)
 
 
+
 	def insert(self, key: KeyType, val: ValType, rank: Rank = None):
 		self.size += 1
+		existing_node = self.findNode(key)
+		if existing_node:
+			if val[0][0] not in existing_node.val[0]:
+				existing_node.val[0].append(val[0][0])
+				hybrid_sort3_desc(existing_node.val[0])
+			return None
 		if rank is None:
 			rank = self.get_random_rank()
 		x = Node(key, val, rank, None, None, None)
@@ -81,7 +90,7 @@ class ZipZipTree:
 		else:
 			prev.right = x
 			x.parent = prev
-   
+
 		if cur is None:
 			x.left = None
 			x.right = None
@@ -103,7 +112,6 @@ class ZipZipTree:
 				while cur is not None and cur.key >= key:
 					prev = cur
 					cur = cur.left   
-
 			if fix.key > key or (fix == x and prev.key > key):
 				fix.left = cur
 				if cur:
@@ -115,7 +123,6 @@ class ZipZipTree:
 		return x
 
 	def remove(self, key: KeyType):
-		
 		self.size -= 1
 		cur = self.root
 		prev = None
@@ -125,10 +132,14 @@ class ZipZipTree:
 				cur = cur.left
 			else:
 				cur = cur.right
+
+		if len(cur.val[0]) > 1:
+			cur.val[0].pop()
+			return None
+
 		left = cur.left
 		right = cur.right
-  
-  
+
 		if left is None:
 			next_node = right
 		elif right is None:
@@ -137,18 +148,18 @@ class ZipZipTree:
 			next_node = left
 		else:
 			next_node = right
-   
+
 		if next_node:
 			next_node.parent = prev
-   
+
 		if prev is None:
 			self.root = next_node
 		elif key < prev.key:
 			prev.left = next_node
 		else:
 			prev.right = next_node
+
 		
-  
 		lowest_affected_node = next_node if next_node else prev 
 
 		while left is not None and right is not None:
@@ -177,6 +188,7 @@ class ZipZipTree:
 		return self._findNode(self.root, key)
 
 	def _findNode(self, node: Node, key: KeyType) -> Node:
+
 		if node is None:
 			return None
 		if key < node.key:
@@ -184,6 +196,7 @@ class ZipZipTree:
 		if key > node.key:
 			return self._findNode(node.right, key)
 		return node
+
 
 	def _find(self, node: Node, key: KeyType) -> ValType:
 		if node is None:
@@ -216,4 +229,6 @@ class ZipZipTree:
 		if key > node.key:
 			return 1 + self._get_depth(node.right, key)
 		return 1
+
+
 
