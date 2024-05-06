@@ -84,7 +84,7 @@ def test_best_fit():
     
     print("All test cases passed!")
 if __name__ == "__main__":
-    num_items = 15000
+    num_items = 1500
     items = generate_test_data(num_items, 5)
     # items = [0.9, 0.2, 0.3, 0.8, 0.7, 0.7, 0.2, 0.4, 0.7, 0.8, 0.7, 1.0, 0.8, 0.8, 0.8, 0.2, 0.7, 1.0, 0.4, 0.8, 0.5, 1.0, 0.4, 0.8, 0.2, 0.5, 0.8, 1.0, 0.8, 0.5, 0.9, 0.3, 0.1, 1.0, 0.6, 0.2, 0.9, 0.8, 0.2, 0.4, 0.6, 0.6, 0.6, 0.2, 0.5, 0.8, 1.0, 0.6, 0.3, 0.3]
     items2 = deepcopy(items)
