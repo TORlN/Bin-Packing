@@ -122,69 +122,65 @@ class ZipZipTree:
 		return x
 
 	def remove(self, key: KeyType):
-		try:
-			self.size -= 1
-			cur = self.root
-			val = None
-			prev = None
-			while key != cur.key:
-				prev = cur
-				if key < cur.key:
-					cur = cur.left
-				else:
-					cur = cur.right
-			if cur.val[0] and isinstance(cur.val[0], list):
-				if len(cur.val[0]) > 1:
-					val = cur.val[0].pop()
-
-			left = cur.left
-			right = cur.right
-
-			if left is None:
-				next_node = right
-			elif right is None:
-				next_node = left
-			elif left.rank >= right.rank:
-				next_node = left
+		self.size -= 1
+		cur = self.root
+		val = None
+		prev = None
+		while key != cur.key:
+			prev = cur
+			if key < cur.key:
+				cur = cur.left
 			else:
-				next_node = right
+				cur = cur.right
+		if cur.val[0] and isinstance(cur.val[0], list):
+			if len(cur.val[0]) > 1:
+				val = cur.val[0].pop()
 
-			if next_node:
-				next_node.parent = prev
+		left = cur.left
+		right = cur.right
 
-			if prev is None:
-				self.root = next_node
-			elif key < prev.key:
-				prev.left = next_node
+		if left is None:
+			next_node = right
+		elif right is None:
+			next_node = left
+		elif left.rank >= right.rank:
+			next_node = left
+		else:
+			next_node = right
+
+		if next_node:
+			next_node.parent = prev
+
+		if prev is None:
+			self.root = next_node
+		elif key < prev.key:
+			prev.left = next_node
+		else:
+			prev.right = next_node
+
+		
+		lowest_affected_node = next_node if next_node else prev 
+
+		while left is not None and right is not None:
+			if left.rank >= right.rank:
+				while left is not None and left.rank >= right.rank:
+					prev = left
+					left = left.right
+				prev.right = right
+				if right:
+					right.parent = prev
 			else:
-				prev.right = next_node
+				while right is not None and left.rank < right.rank:
+					prev = right
+					right = right.left
+				prev.left = left
+				if left:
+					left.parent = prev
 
-			
-			lowest_affected_node = next_node if next_node else prev 
-
-			while left is not None and right is not None:
-				if left.rank >= right.rank:
-					while left is not None and left.rank >= right.rank:
-						prev = left
-						left = left.right
-					prev.right = right
-					if right:
-						right.parent = prev
-				else:
-					while right is not None and left.rank < right.rank:
-						prev = right
-						right = right.left
-					prev.left = left
-					if left:
-						left.parent = prev
-
-				lowest_affected_node = prev
-			if val is not None:
-				return lowest_affected_node, val
-			return lowest_affected_node
-		except Exception as e:
-			print(e)
-			return None
+			lowest_affected_node = prev
+		if val is not None:
+			return lowest_affected_node, val
+		return lowest_affected_node
 
 	def find(self, key: KeyType) -> ValType:
 		return self._find(self.root, key)
