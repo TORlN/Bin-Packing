@@ -66,10 +66,9 @@ class ZipZipTree:
 	def insert(self, key: KeyType, val: ValType, rank: Rank = None):
 		self.size += 1
 		existing_node = self.findNode(key)
-		if existing_node and isinstance(existing_node.val[0], list):
+		if existing_node and isinstance(val[0], list):
 			if val[0][0] not in existing_node.val[0]:
 				existing_node.val[0].append(val[0][0])
-				hybrid_sort3_desc(existing_node.val[0])
 			return None
 		if rank is None:
 			rank = self.get_random_rank()
