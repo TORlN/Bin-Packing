@@ -4,7 +4,7 @@ from copy import deepcopy
 import time
 import matplotlib.pyplot as plt
 import numpy as np
-
+from matplotlib.ticker import ScalarFormatter
 import requirements
 from sklearn.metrics import r2_score
 
@@ -51,6 +51,10 @@ def plot_and_save_bin_packing_waste(testN, wastes, algorithm_name):
         color='b'
     )
 
+    plt.gca().yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
+    plt.gca().yaxis.get_major_formatter().set_scientific(False)
+    plt.minorticks_off()
+    plt.xticks(testN, [f"{x:,}" for x in testN])
     plt.xlabel("Number of Items (n)")
     plt.ylabel("Waste")
     plt.title(f"Mean Waste and Best-fit Line for {algorithm_name} on Log-Log Scale")
@@ -79,6 +83,10 @@ def plot_and_save_all_bin_packing_waste(testN, wastes_dict):
         # Plot the actual mean waste data points
         plt.loglog(testN, mean_waste, 'o', label=f"{algorithm_name} Mean Waste", ls = '-')
 
+    plt.gca().yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
+    plt.gca().yaxis.get_major_formatter().set_scientific(False)    
+    plt.minorticks_off()
+    plt.xticks(testN, [f"{x:,}" for x in testN])
     plt.xlabel("Number of Items (n)")
     plt.ylabel("Waste")
     if len(wastes_dict) > 2:
@@ -128,10 +136,8 @@ def main():
     ]
 
     num_algorithms = len(packing_algorithms)  # Number of algorithms being tested
-    num_tests_per_algorithm = 20  # Number of lists to generate per algorithm
-    list_sizes = [500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000]  # Example input sizes to test
-    random_seed = 42  # Seed for reproducibility
-    np.random.seed(random_seed)
+    num_tests_per_algorithm = 5  # Number of lists to generate per algorithm
+    list_sizes = [500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000]  # Example input sizes to test
     wastes = np.zeros((len(list_sizes), num_algorithms, num_tests_per_algorithm))
     wastes_dict = {name: np.zeros((len(list_sizes), num_tests_per_algorithm)) for name, _ in packing_algorithms}
 
@@ -141,7 +147,7 @@ def main():
             # Loop through each packing algorithm to calculate waste
             for k, (algorithm_name, algorithm_function) in enumerate(packing_algorithms):
                 # Generate a random list of items between 0.0 and 1.0
-                items = np.random.uniform(0.0, 1.0, n)
+                items = np.random.uniform(0.0, 0.4, n)
                 # Dynamically print which function is being tested
                 print(f"Testing {algorithm_name} with input size {n} (Test {j + 1}/{num_tests_per_algorithm})")
 
